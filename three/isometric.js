@@ -18,12 +18,14 @@
 				scene.background = new THREE.Color( 0xf0f0f0 );
 
 				// Grid
-				var gridHelper = new THREE.GridHelper(1200, 12);
-				scene.add( gridHelper );
+				// var gridHelper = new THREE.GridHelper(1200, 12);
+				// scene.add( gridHelper );
 
 				// Cubes
 				var geometry = new THREE.BoxGeometry( 50, 50, 50 );
-				var material = new THREE.MeshLambertMaterial( { color: 0xffffff, overdraw: 0.5 } );
+				// var material = new THREE.MeshLambertMaterial( { color: 0xffffff, overdraw: 0.5 } );
+        // var material = new THREE.MeshLambertMaterial( { color: 0xff0000} );
+
 
           //add random cubes to populate the grid
     			// for ( var i = 0; i < 10; i ++ ) {
@@ -37,12 +39,26 @@
           //
     			// }
 
-					var cube = new THREE.Mesh( geometry, material);
-					cube.scale.y = Math.floor( Math.random() * 2 + 1 );
-					cube.position.x = Math.floor( ( Math.random() * 1000 - 500 ) / 50 ) * 50 + 25;
-					cube.position.y = ( cube.scale.y * 50 ) / 2;
-					cube.position.z = Math.floor( ( Math.random() * 1000 - 500 ) / 50 ) * 50 + 25;
-					scene.add( cube );
+					// var cube = new THREE.Mesh( geometry, material);
+					// cube.scale.y = Math.floor( Math.random() * 2 + 1 );
+					// cube.position.x = Math.floor( ( Math.random() * 1000 - 500 ) / 50 ) * 50 + 25;
+					// cube.position.y = ( cube.scale.y * 50 ) / 2;
+					// cube.position.z = Math.floor( ( Math.random() * 1000 - 500 ) / 50 ) * 50 + 25;
+					// scene.add( cube );
+
+
+
+              var loader = new THREE.JSONLoader();
+              loader.load('three/keeperold.json', function(geometry, materials) {
+                  mesh = new THREE.Mesh(geometry, materials);
+                  mesh.scale.x = mesh.scale.y = mesh.scale.z = 5;
+                  mesh.position.x = Math.floor( ( Math.random() * 1000 - 500 ) / 50 ) * 50 + 25;
+        					mesh.position.y = ( mesh.scale.y * 50 ) / 2;
+        					mesh.position.z = Math.floor( ( Math.random() * 1000 - 500 ) / 50 ) * 50 + 25;
+                  mesh.translation = geometry.center(geometry);
+                  scene.add(mesh);
+              });
+
 
 
           // movement
@@ -52,18 +68,19 @@
           function onDocumentKeyDown(event) {
             var keyCode = event.which;
             if (keyCode == 37) {
-                cube.position.z += zSpeed;
+                mesh.position.z += zSpeed;
             } else if (keyCode == 39) {
-                cube.position.z -= zSpeed;
+                mesh.position.z -= zSpeed;
             } else if (keyCode == 40) {
-                cube.position.x += xSpeed;
+                mesh.position.x += xSpeed;
             } else if (keyCode == 38) {
-                cube.position.x -= xSpeed;
+                mesh.position.x -= xSpeed;
             }
             render();
           }
 
 				// Lights
+
 				var ambientLight = new THREE.AmbientLight( Math.random() * 0x10 );
 				scene.add( ambientLight );
 
@@ -100,14 +117,14 @@
 			}
 
       // set this for fixed camera
-      camera.position.x = Math.cos(100) * 400;
-      camera.position.z = Math.sin(100) * 400;
+      // camera.position.x = Math.cos(100) * 400;
+      // camera.position.z = Math.sin(100) * 400;
 
 			function render() {
         // unset this for rotating camera
-				// var timer = Date.now() * 0.0001;
-				// camera.position.x = Math.cos(timer) * 800;
-				// camera.position.z = Math.sin(timer) * 800;
+				var timer = Date.now() * 0.0001;
+				camera.position.x = Math.cos(timer) * 800;
+				camera.position.z = Math.sin(timer) * 800;
 
 				camera.lookAt( scene.position );
 				renderer.render( scene, camera );
