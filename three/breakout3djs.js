@@ -6,7 +6,6 @@ init();
 animate();
 
 function init() {
-
   container = document.createElement( 'div' );
   document.body.appendChild( container );
 
@@ -22,16 +21,25 @@ function init() {
   scene.add( gridHelper );
 
   // Cubes
-  var shipGeo = new THREE.BoxGeometry( 50, 50, 50 );
-  var shipLoader = new THREE.ObjectLoader();
-  shipLoader.load('models/shard-ship.json', function(ship) {
-    ship.scale.x = ship.scale.y = ship.scale.z = 20;
-    ship.position.x = 500;
-    ship.position.y = 0;
-    ship.position.z = 20;
-    ship.rotation.y = -1 *(Math.PI / 2);
-    ship.translation = shipGeo.center(shipGeo);
-    scene.add(ship);
+  //
+  var paddleGeo = new THREE.BoxGeometry( 50, 50, 150 );
+  var material = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
+  var paddle = new THREE.Mesh( paddleGeo, material );
+  paddle.position.x = 500;
+  paddle.position.y = 0;
+  paddle.position.z = 20;
+  scene.add( paddle );
+
+  // var shipGeo = new THREE.BoxGeometry( 50, 50, 50 );
+  // var shipLoader = new THREE.ObjectLoader();
+  // shipLoader.load('models/shard-ship.json', function(ship) {
+  //   ship.scale.x = ship.scale.y = ship.scale.z = 20;
+  //   ship.position.x = 500;
+  //   ship.position.y = 0;
+  //   ship.position.z = 20;
+  //   ship.rotation.y = -1 *(Math.PI / 2);
+  //   ship.translation = shipGeo.center(shipGeo);
+  //   scene.add(ship);
 
     // movement - should seperate into another function and call inside object loader
     var xSpeed = 50;
@@ -40,30 +48,16 @@ function init() {
     function onDocumentKeyDown(event) {
       var keyCode = event.which;
       if (keyCode == 37) {
-          ship.position.z += zSpeed;
+          paddle.position.z += zSpeed;
       } else if (keyCode == 39) {
-          ship.position.z -= zSpeed;
+          paddle.position.z -= zSpeed;
       } else if (keyCode == 40) {
-          ship.position.x += xSpeed;
+          paddle.position.x += xSpeed;
       } else if (keyCode == 38) {
-          ship.position.x -= xSpeed;
+          paddle.position.x -= xSpeed;
       }
       render();
     }
-  });
-
-  var wallGeo = new THREE.BoxGeometry( 50, 50, 50 );
-  var wallLoader = new THREE.ObjectLoader();
-  wallLoader.load('models/wall.json', function(wall) {
-    wall.scale.x = wall.scale.y = wall.scale.z = 15;
-    wall.position.x = -300;
-    wall.position.y = 0;
-    wall.position.z = 500;
-    wall.rotation.y = -1 *(Math.PI / 2);
-    wall.translation = wallGeo.center(wallGeo);
-  scene.add(wall);
-});
-
 
   // Lights
 
