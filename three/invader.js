@@ -22,17 +22,16 @@ function init() {
   scene.add( gridHelper );
 
   // Cubes
-  var geometry = new THREE.BoxGeometry( 50, 50, 50 );
-
-  var loader = new THREE.ObjectLoader();
-  loader.load('models/shard-ship.json', function(obj) {
-    obj.scale.x = obj.scale.y = obj.scale.z = 20;
-    obj.position.x = 500;
-    obj.position.y = 0;
-    obj.position.z = 20;
-    obj.rotation.y = -1 *(Math.PI / 2);
-    obj.translation = geometry.center(geometry);
-    scene.add(obj);
+  var shipGeo = new THREE.BoxGeometry( 50, 50, 50 );
+  var shipLoader = new THREE.ObjectLoader();
+  shipLoader.load('models/shard-ship.json', function(ship) {
+    ship.scale.x = ship.scale.y = ship.scale.z = 20;
+    ship.position.x = 500;
+    ship.position.y = 0;
+    ship.position.z = 20;
+    ship.rotation.y = -1 *(Math.PI / 2);
+    ship.translation = shipGeo.center(shipGeo);
+    scene.add(ship);
 
     // movement - should seperate into another function and call inside object loader
     var xSpeed = 50;
@@ -41,29 +40,35 @@ function init() {
     function onDocumentKeyDown(event) {
       var keyCode = event.which;
       if (keyCode == 37) {
-          obj.position.z += zSpeed;
+          ship.position.z += zSpeed;
       } else if (keyCode == 39) {
-          obj.position.z -= zSpeed;
+          ship.position.z -= zSpeed;
       } else if (keyCode == 40) {
-          obj.position.x += xSpeed;
+          ship.position.x += xSpeed;
       } else if (keyCode == 38) {
-          obj.position.x -= xSpeed;
+          ship.position.x -= xSpeed;
       }
       render();
     }
   });
+
+  var wallGeo = new THREE.BoxGeometry( 50, 50, 50 );
+  var wallLoader = new THREE.ObjectLoader();
+  wallLoader.load('models/wall.json', function(wall) {
+    wall.scale.x = wall.scale.y = wall.scale.z = 15;
+    wall.position.x = -300;
+    wall.position.y = 0;
+    wall.position.z = 500;
+    wall.rotation.y = -1 *(Math.PI / 2);
+    wall.translation = wallGeo.center(wallGeo);
+  scene.add(wall);
+});
 
 
   // Lights
 
   var ambientLight = new THREE.AmbientLight( 0xf03ff0 );
   scene.add( ambientLight );
-
-  // var directionalLight = new THREE.DirectionalLight( 0xffffff );
-  // directionalLight.position.x = 0.5;
-  // directionalLight.position.y = 0.5;
-  // directionalLight.position.z = 0.5;
-  // scene.add( directionalLight );
 
   // renderer
   renderer = new THREE.WebGLRenderer({canvas: myCanvas});
@@ -96,9 +101,9 @@ camera.position.z = Math.sin(100) * 400;
 
 function render() {
   // unset this for rotating camera
-  // var timer = Date.now() * 0.0001;
-  // camera.position.x = Math.cos(timer) * 800;
-  // camera.position.z = Math.sin(timer) * 800;
+  var timer = Date.now() * 0.0001;
+  camera.position.x = Math.cos(timer) * 800;
+  camera.position.z = Math.sin(timer) * 800;
   camera.lookAt( scene.position );
   renderer.render( scene, camera );
 }
