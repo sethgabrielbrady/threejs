@@ -20,47 +20,43 @@ function init() {
   var gridHelper = new THREE.GridHelper(1000, 12);
   scene.add( gridHelper );
 
-  // Cubes
-  //
-  var paddleGeo = new THREE.BoxGeometry( 50, 50, 150 );
-  var material = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
-  var paddle = new THREE.Mesh( paddleGeo, material );
+  //paddle
+  var paddleGeo = new THREE.BoxGeometry( 50, 50, 170 );
+  var paddleMatr = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
+  var paddle = new THREE.Mesh( paddleGeo, paddleMatr );
   paddle.position.x = 500;
-  paddle.position.y = 0;
+  paddle.position.y = 50;
   paddle.position.z = 20;
   scene.add( paddle );
 
-  // var shipGeo = new THREE.BoxGeometry( 50, 50, 50 );
-  // var shipLoader = new THREE.ObjectLoader();
-  // shipLoader.load('models/shard-ship.json', function(ship) {
-  //   ship.scale.x = ship.scale.y = ship.scale.z = 20;
-  //   ship.position.x = 500;
-  //   ship.position.y = 0;
-  //   ship.position.z = 20;
-  //   ship.rotation.y = -1 *(Math.PI / 2);
-  //   ship.translation = shipGeo.center(shipGeo);
-  //   scene.add(ship);
+  var ballGeo = new THREE.BoxGeometry( 25, 25, 25 );
+  var ballMatr = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
+  var ball = new THREE.Mesh( ballGeo, ballMatr );
+  ball.position.x = 0;
+  ball.position.y = 50;
+  ball.position.z = 0;
+  scene.add( ball );
 
-    // movement - should seperate into another function and call inside object loader
-    var xSpeed = 50;
-    var zSpeed = 50;
-    document.addEventListener("keydown", onDocumentKeyDown, false);
-    function onDocumentKeyDown(event) {
-      var keyCode = event.which;
-      if (keyCode == 37) {
-          paddle.position.z += zSpeed;
-      } else if (keyCode == 39) {
-          paddle.position.z -= zSpeed;
-      } else if (keyCode == 40) {
-          paddle.position.x += xSpeed;
-      } else if (keyCode == 38) {
-          paddle.position.x -= xSpeed;
-      }
-      render();
+
+  // movement - should seperate into another function and call inside object loader
+  var xSpeed = 50;
+  var zSpeed = 50;
+  document.addEventListener("keydown", onDocumentKeyDown, false);
+  function onDocumentKeyDown(event) {
+    var keyCode = event.which;
+    if (keyCode == 37) {
+        paddle.position.z += zSpeed;
+    } else if (keyCode == 39) {
+        paddle.position.z -= zSpeed;
+    } else if (keyCode == 40) {
+        paddle.position.x += xSpeed;
+    } else if (keyCode == 38) {
+        paddle.position.x -= xSpeed;
     }
+    render();
+  }
 
   // Lights
-
   var ambientLight = new THREE.AmbientLight( 0xf03ff0 );
   scene.add( ambientLight );
 
