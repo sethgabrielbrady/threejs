@@ -6,9 +6,10 @@ var paddle;
 var upWall;
 var canvas = document.getElementById("myCanvas");
 var gridHelper;
-var dx = 20;
-var dy =-20;
+var dx = 15;
+var dy =-15;
 var ballRadius = 12.5;
+var rightPressed, leftPressed;
 
 
 init();
@@ -59,23 +60,7 @@ function init() {
   scene.add( ball );
   // movement - should seperate into another function and call inside object loader
 
-  document.addEventListener("keydown", onDocumentKeyDown, false);
 
-  function onDocumentKeyDown(event) {
-    var xSpeed = 50;
-    var zSpeed = 50;
-    var keyCode = event.which;
-    if (keyCode == 37) {
-        paddle.position.z += zSpeed;
-    } else if (keyCode == 39) {
-        paddle.position.z -= zSpeed;
-    } else if (keyCode == 40) {
-        paddle.position.x += xSpeed;
-    } else if (keyCode == 38) {
-        paddle.position.x -= xSpeed;
-    }
-    render();
-  }
 
   // Lights
   var ambientLight = new THREE.AmbientLight( 0xf03ff0 );
@@ -117,21 +102,41 @@ function col(){
   ball.position.x += dx;
   ball.position.z += dy;
 
-  // if(ball.position.x + dx >= 500 -ballRadius || ball.position.x + dx <= ballRadius -500) {
-  //   dx = -dx;
-  // }
   if( ball.position.x + dx >= 500 - ballRadius || ball.position.x + dx <= ballRadius -500) {
     dx = -dx;
   }
-  if (ball.position.z <= -500 + ballRadius){
-    dy = -dy;
-  }
-  if (ball.position.z >= 500 + ballRadius){
+  if (ball.position.z <= -500 + ballRadius || ball.position.z >= 500 - ballRadius){
     dy = -dy;
   }
 }
 
+document.addEventListener("keydown", keyDownHandler, false);
+document.addEventListener("keyup", keyUpHandler, false);
+// paddle movement with keys
+function keyDownHandler(e) {
+  if(e.keyCode == 37) {
+      rightPressed = true;
+  }
+  else if(e.keyCode == 39) {
+      leftPressed = true;
+  }
+}
+
+function keyUpHandler(e) {
+  if(e.keyCode == 37) {
+    rightPressed = false;
+  }
+  else if(e.keyCode == 39) {
+    leftPressed = false;
+  }
+}
+
 function render() {
+  if(rightPressed && paddle.position.z < 500-70) {
+    paddle.position.z += 14;
+  } else if(leftPressed && paddle.position.z > -500 + 70) {
+    paddle.position.z -= 14;
+  }
   col();
   console.log(paddle.position.x, paddle.position.y, paddle.position.z);
   // unset this for rotating camera
