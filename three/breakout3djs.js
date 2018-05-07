@@ -2,6 +2,14 @@ var container, stats;
 var camera, scene, renderer;
 var frustumSize = 1000;
 var ball;
+var paddle;
+var upWall;
+var canvas = document.getElementById("myCanvas");
+var gridHelper;
+var dx = 20;
+var colCheck;
+
+
 init();
 animate();
 
@@ -10,7 +18,9 @@ function init() {
   container = document.createElement( 'div' );
   document.body.appendChild( container );
 
-  var aspect = window.innerWidth / window.innerHeight;
+  var aspect = canvas.width / canvas.height;
+
+  // var aspect = window.innerWidth / window.innerHeight;
   camera = new THREE.OrthographicCamera( frustumSize * aspect / - 2, frustumSize * aspect / 2, frustumSize / 2, frustumSize / - 2, 1, 2000 );
   camera.position.y = 400;
 
@@ -18,17 +28,26 @@ function init() {
   scene.background = new THREE.Color( 0xf0f0f0 );
 
   // Grid
-  var gridHelper = new THREE.GridHelper(1000, 12);
+  gridHelper = new THREE.GridHelper(1000, 12);
   scene.add( gridHelper );
 
   //paddle
   var paddleGeo = new THREE.BoxGeometry( 50, 50, 170 );
   var paddleMatr = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
-  var paddle = new THREE.Mesh( paddleGeo, paddleMatr );
+  paddle = new THREE.Mesh( paddleGeo, paddleMatr );
   paddle.position.x = 500;
   paddle.position.y = 50;
   paddle.position.z = 20;
   scene.add( paddle );
+
+  var upWallGeo = new THREE.BoxGeometry( 10, 50, 1000 );
+  var upWallMatr = new THREE.MeshBasicMaterial( { color: 0x000000 } );
+  upWall = new THREE.Mesh( upWallGeo, upWallMatr );
+  upWall.position.x = -500;
+  upWall.position.y = 50;
+  upWall.position.z = 0;
+  scene.add( upWall );
+
 
   var ballGeo = new THREE.BoxGeometry( 25, 25, 25 );
   var ballMatr = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
@@ -37,7 +56,6 @@ function init() {
   ball.position.y = 50;
   ball.position.z = 0;
   scene.add( ball );
-
   // movement - should seperate into another function and call inside object loader
 
   document.addEventListener("keydown", onDocumentKeyDown, false);
@@ -92,8 +110,19 @@ camera.position.x = Math.cos(100) * 400;
 camera.position.z = Math.sin(100) * 400;
 
 function col(){
-  ball.position.x += 20;
+  //updates x and y everytime the fn is ran
+  ball.position.x += dx;
+
+  if (ball.position.x === paddle.position.x){
+    colCheck = -1;
+    dx = dx * (colCheck);
+  }
+  if (ball.position.x === upWall.position.x){
+    colCheck = -1;
+    dx = dx * (colCheck);
+  }
 }
+
 function render() {
   col();
   // unset this for rotating camera
