@@ -1,9 +1,10 @@
 var container, stats;
 var camera, scene, renderer;
 var frustumSize = 1000;
-
+var ball;
 init();
 animate();
+
 
 function init() {
   container = document.createElement( 'div' );
@@ -31,18 +32,19 @@ function init() {
 
   var ballGeo = new THREE.BoxGeometry( 25, 25, 25 );
   var ballMatr = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
-  var ball = new THREE.Mesh( ballGeo, ballMatr );
+  ball = new THREE.Mesh( ballGeo, ballMatr );
   ball.position.x = 0;
   ball.position.y = 50;
   ball.position.z = 0;
   scene.add( ball );
 
-
   // movement - should seperate into another function and call inside object loader
-  var xSpeed = 50;
-  var zSpeed = 50;
+
   document.addEventListener("keydown", onDocumentKeyDown, false);
+
   function onDocumentKeyDown(event) {
+    var xSpeed = 50;
+    var zSpeed = 50;
     var keyCode = event.which;
     if (keyCode == 37) {
         paddle.position.z += zSpeed;
@@ -89,7 +91,11 @@ function animate() {
 camera.position.x = Math.cos(100) * 400;
 camera.position.z = Math.sin(100) * 400;
 
+function col(){
+  ball.position.x += 20;
+}
 function render() {
+  col();
   // unset this for rotating camera
   // var timer = Date.now() * 0.0001;
   // camera.position.x = Math.cos(timer) * 800;

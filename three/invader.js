@@ -24,8 +24,8 @@ function init() {
   // Cubes
   var shipGeo = new THREE.BoxGeometry( 50, 50, 50 );
   var shipLoader = new THREE.ObjectLoader();
-  shipLoader.load('models/shard-ship.json', function(ship) {
-    ship.scale.x = ship.scale.y = ship.scale.z = 20;
+  shipLoader.load('models/keeperWalking.json', function(ship) {
+    ship.scale.x = ship.scale.y = ship.scale.z = 1000;
     ship.position.x = 500;
     ship.position.y = 0;
     ship.position.z = 20;
@@ -52,23 +52,25 @@ function init() {
     }
   });
 
-  var wallGeo = new THREE.BoxGeometry( 50, 50, 50 );
-  var wallLoader = new THREE.ObjectLoader();
-  wallLoader.load('models/wall.json', function(wall) {
-    wall.scale.x = wall.scale.y = wall.scale.z = 15;
-    wall.position.x = -300;
-    wall.position.y = 0;
-    wall.position.z = 500;
-    wall.rotation.y = -1 *(Math.PI / 2);
-    wall.translation = wallGeo.center(wallGeo);
-  scene.add(wall);
-});
+//   var wallGeo = new THREE.BoxGeometry( 50, 50, 50 );
+//   var wallLoader = new THREE.ObjectLoader();
+//   wallLoader.load('models/wall.json', function(wall) {
+//     wall.scale.x = wall.scale.y = wall.scale.z = 15;
+//     wall.position.x = -300;
+//     wall.position.y = 0;
+//     wall.position.z = 500;
+//     wall.rotation.y = -1 *(Math.PI / 2);
+//     wall.translation = wallGeo.center(wallGeo);
+//   scene.add(wall);
+// });
 
 
   // Lights
 
-  var ambientLight = new THREE.AmbientLight( 0xf03ff0 );
+  var ambientLight = new THREE.AmbientLight( 0xffffff, 0.75 );
   scene.add( ambientLight );
+  var light2 = new THREE.PointLight(0xffffff, 1);
+  scene.add(light2);
 
   // renderer
   renderer = new THREE.WebGLRenderer({canvas: myCanvas});
