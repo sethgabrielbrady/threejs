@@ -10,6 +10,7 @@ var dx = 20;
 var dy =-20;
 var ballRadius = 12.5;
 
+
 init();
 animate();
 
@@ -116,7 +117,10 @@ function col(){
   ball.position.x += dx;
   ball.position.z += dy;
 
-  if(ball.position.x + dx >= 500 -ballRadius || ball.position.x + dx <= ballRadius -500) {
+  // if(ball.position.x + dx >= 500 -ballRadius || ball.position.x + dx <= ballRadius -500) {
+  //   dx = -dx;
+  // }
+  if( ball.position.x + dx >= 500 - ballRadius || ball.position.x + dx <= ballRadius -500) {
     dx = -dx;
   }
   if (ball.position.z <= -500 + ballRadius){
@@ -129,6 +133,7 @@ function col(){
 
 function render() {
   col();
+  console.log(paddle.position.x, paddle.position.y, paddle.position.z);
   // unset this for rotating camera
   // var timer = Date.now() * 0.0001;
   // camera.position.x = Math.cos(timer) * 800;
