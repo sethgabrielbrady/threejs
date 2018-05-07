@@ -7,8 +7,8 @@ var upWall;
 var canvas = document.getElementById("myCanvas");
 var gridHelper;
 var dx = 20;
-var colCheck;
-
+var dy =-20;
+var ballRadius = 12.5;
 
 init();
 animate();
@@ -33,26 +33,26 @@ function init() {
 
   //paddle
   var paddleGeo = new THREE.BoxGeometry( 50, 50, 170 );
-  var paddleMatr = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
+  var paddleMatr = new THREE.MeshLambertMaterial( { color: 0xff0000 } );
   paddle = new THREE.Mesh( paddleGeo, paddleMatr );
   paddle.position.x = 500;
   paddle.position.y = 50;
   paddle.position.z = 20;
   scene.add( paddle );
 
-  var upWallGeo = new THREE.BoxGeometry( 10, 50, 1000 );
-  var upWallMatr = new THREE.MeshBasicMaterial( { color: 0x000000 } );
-  upWall = new THREE.Mesh( upWallGeo, upWallMatr );
-  upWall.position.x = -500;
-  upWall.position.y = 50;
-  upWall.position.z = 0;
-  scene.add( upWall );
+  // var upWallGeo = new THREE.BoxGeometry( 10, 50, 1000 );
+  // var upWallMatr = new THREE.MeshBasicMaterial( { color: 0x000000 } );
+  // upWall = new THREE.Mesh( upWallGeo, upWallMatr );
+  // upWall.position.x = -500;
+  // upWall.position.y = 50;
+  // upWall.position.z = 0;
+  // scene.add( upWall );
 
 
   var ballGeo = new THREE.BoxGeometry( 25, 25, 25 );
   var ballMatr = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
   ball = new THREE.Mesh( ballGeo, ballMatr );
-  ball.position.x = 0;
+  ball.position.x = 500;
   ball.position.y = 50;
   ball.position.z = 0;
   scene.add( ball );
@@ -109,17 +109,21 @@ function animate() {
 camera.position.x = Math.cos(100) * 400;
 camera.position.z = Math.sin(100) * 400;
 
-function col(){
-  //updates x and y everytime the fn is ran
-  ball.position.x += dx;
+ball.position.x += dx;
+ball.position.z += dy;
 
-  if (ball.position.x === paddle.position.x){
-    colCheck = -1;
-    dx = dx * (colCheck);
+function col(){
+  ball.position.x += dx;
+  ball.position.z += dy;
+
+  if(ball.position.x + dx >= 500 -ballRadius || ball.position.x + dx <= ballRadius -500) {
+    dx = -dx;
   }
-  if (ball.position.x === upWall.position.x){
-    colCheck = -1;
-    dx = dx * (colCheck);
+  if (ball.position.z <= -500 + ballRadius){
+    dy = -dy;
+  }
+  if (ball.position.z >= 500 + ballRadius){
+    dy = -dy;
   }
 }
 
