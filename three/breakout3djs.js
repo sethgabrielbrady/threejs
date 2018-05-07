@@ -42,15 +42,6 @@ function init() {
   paddle.position.z = 20;
   scene.add( paddle );
 
-  // var upWallGeo = new THREE.BoxGeometry( 10, 50, 1000 );
-  // var upWallMatr = new THREE.MeshBasicMaterial( { color: 0x000000 } );
-  // upWall = new THREE.Mesh( upWallGeo, upWallMatr );
-  // upWall.position.x = -500;
-  // upWall.position.y = 50;
-  // upWall.position.z = 0;
-  // scene.add( upWall );
-
-
   var ballGeo = new THREE.BoxGeometry( 25, 25, 25 );
   var ballMatr = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
   ball = new THREE.Mesh( ballGeo, ballMatr );
@@ -58,13 +49,13 @@ function init() {
   ball.position.y = 50;
   ball.position.z = 0;
   scene.add( ball );
-  // movement - should seperate into another function and call inside object loader
-
-
 
   // Lights
   var ambientLight = new THREE.AmbientLight( 0xf03ff0 );
   scene.add( ambientLight );
+
+  var light2 = new THREE.PointLight(0xffffff);
+  scene.add(light2);
 
   // renderer
   renderer = new THREE.WebGLRenderer({canvas: myCanvas});
@@ -95,9 +86,10 @@ function animate() {
 camera.position.x = Math.cos(100) * 400;
 camera.position.z = Math.sin(100) * 400;
 
-ball.position.x += dx;
-ball.position.z += dy;
 
+
+// ball.position.x += dx;
+// ball.position.z += dy;
 function col(){
   ball.position.x += dx;
   ball.position.z += dy;
@@ -121,7 +113,6 @@ function keyDownHandler(e) {
       leftPressed = true;
   }
 }
-
 function keyUpHandler(e) {
   if(e.keyCode == 37) {
     rightPressed = false;
