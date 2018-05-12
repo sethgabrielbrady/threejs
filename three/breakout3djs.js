@@ -151,6 +151,8 @@ function render() {
   if (ball.position.x > paddle.position.x + 100){
     ball.position.x = -500;
     ball.position.z = Math.random() * 500;
+    dx = 10;
+    dy =-10;
   }
   // unset this for rotating camera
   // var timer = Date.now() * 0.0001;
