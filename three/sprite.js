@@ -54,8 +54,8 @@ scene.add(mesh, mesh1);
 
 mesh1.rotation.x = 2.25;
   myCanvas.innerHTML = mesh1.rotation.y;
-  console.log(mesh.position.z, mesh.position.y, mesh.position.x);
-  console.log(mesh1.position.z, mesh1.position.y, mesh1.position.x);
+  // console.log(mesh.position.z, mesh.position.y, mesh.position.x);
+  // console.log(mesh1.position.z, mesh1.position.y, mesh1.position.x);
  // var delta = 0;
   //RENDER LOOP
   var xSpeed = 50;
@@ -65,11 +65,17 @@ document.addEventListener("keydown", onDocumentKeyDown, false);
 function onDocumentKeyDown(event) {
     var keyCode = event.which;
     if (keyCode == 38) {
-        mesh.position.z += ySpeed;
-    } else if (keyCode == 40) {
+        mesh.position.y += ySpeed;
         mesh.position.z -= ySpeed;
+    } else if (keyCode == 40) {
+        mesh.position.z += ySpeed;
+        mesh.position.y -= ySpeed;
     } else if (keyCode == 39) {
         mesh.position.x += xSpeed;
+        material = new THREE.SpriteMaterial({
+          map: new THREE.TextureLoader().load("three/brwnbot.png"),
+          // color: 0xF3FFE2
+        });
     } else if (keyCode == 37) {
         mesh.position.x -= xSpeed;
     }

@@ -6,10 +6,13 @@ var paddle;
 var upWall;
 var canvas = document.getElementById("myCanvas");
 var gridHelper;
-var dx = 15;
-var dy =-15;
+var dx = 10;
+var dy =-10;
 var ballRadius = 12.5;
 var rightPressed, leftPressed;
+var paddleWidth;
+var binary = (Math.random() * 2) + 1;
+var zRND = Math.random() * 500;
 
 
 init();
@@ -45,16 +48,16 @@ function init() {
   var ballGeo = new THREE.BoxGeometry( 25, 25, 25 );
   var ballMatr = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
   ball = new THREE.Mesh( ballGeo, ballMatr );
-  ball.position.x = 500;
+  ball.position.x = -500;
   ball.position.y = 50;
-  ball.position.z = 0;
+  ball.position.z = zRND;
   scene.add( ball );
 
   // Lights
   var ambientLight = new THREE.AmbientLight( 0xf03ff0 );
   scene.add( ambientLight );
 
-  var light2 = new THREE.PointLight(0xffffff);
+  var light2 = new THREE.PointLight( 0xffffff );
   scene.add(light2);
 
   // renderer
@@ -86,15 +89,19 @@ function animate() {
 camera.position.x = Math.cos(100) * 400;
 camera.position.z = Math.sin(100) * 400;
 
-
-
-// ball.position.x += dx;
-// ball.position.z += dy;
 function col(){
   ball.position.x += dx;
   ball.position.z += dy;
 
-  if( ball.position.x + dx >= 500 - ballRadius || ball.position.x + dx <= ballRadius -500) {
+// if ballx is greater than paddle x && ballx is less than paddle x minus 170
+  if( ball.position.x > paddle.position.x &&
+    ball.position.z <= paddle.position.z + 80 &&
+    ball.position.z >= paddle.position.z - 80 ) {
+    dx = -dx;
+    dy = dy + (Math.random() * 10);
+  }
+
+  if(ball.position.x + dx <= ballRadius -500) {
     dx = -dx;
   }
   if (ball.position.z <= -500 + ballRadius || ball.position.z >= 500 - ballRadius){
@@ -107,10 +114,10 @@ document.addEventListener("keyup", keyUpHandler, false);
 // paddle movement with keys
 function keyDownHandler(e) {
   if(e.keyCode == 37) {
-      rightPressed = true;
+    rightPressed = true;
   }
   else if(e.keyCode == 39) {
-      leftPressed = true;
+    leftPressed = true;
   }
 }
 function keyUpHandler(e) {
@@ -128,8 +135,23 @@ function render() {
   } else if(leftPressed && paddle.position.z > -500 + 70) {
     paddle.position.z -= 14;
   }
+
   col();
-  console.log(paddle.position.x, paddle.position.y, paddle.position.z);
+  if (binary === 1){
+    zRND = zRND * -1;
+  }else {
+    zRND = zRND;
+  }
+  console.log(binary);
+  // console.log("paddle z",paddle.position.z);
+  console.log("paddle x",paddle.position.x);
+  // console.log("ball z", ball.position.z);
+  console.log("ball x",ball.position.x);
+
+  if (ball.position.x > paddle.position.x + 100){
+    ball.position.x = -500;
+    ball.position.z = Math.random() * 500;
+  }
   // unset this for rotating camera
   // var timer = Date.now() * 0.0001;
   // camera.position.x = Math.cos(timer) * 800;

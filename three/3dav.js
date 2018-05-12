@@ -8,8 +8,8 @@
       let test_node = document.getElementById('test_node');
       let node;
       let nodeCount = 128;
-        let frequencyData;
-        let cube;
+      let frequencyData;
+      let cube;
 
 
       function play() {
@@ -127,10 +127,10 @@
 			function animate() {
         // renderFrame();
         for ( let i = 1; i < nodeCount; i ++ ) {
-        let ival = i +5;
-        let cubeI = ival;
-        cubeI = scene.getObjectById(  ival, true );
-        cubeI.position.y = (frequencyData[ival]);
+          let ival = i +5;
+          let cubeI = ival;
+          cubeI = scene.getObjectById(  ival, true );
+          cubeI.position.y = (frequencyData[ival]);
         }
 
         // console.log(cube.position.y);
