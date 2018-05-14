@@ -155,9 +155,9 @@ function render() {
     dy =-10;
   }
   // unset this for rotating camera
-  // var timer = Date.now() * 0.0001;
-  // camera.position.x = Math.cos(timer) * 800;
-  // camera.position.z = Math.sin(timer) * 800;
+  var timer = Date.now() * 0.0001;
+  camera.position.x = Math.cos(timer) * 800;
+  camera.position.z = Math.sin(timer) * 800;
   camera.lookAt( scene.position );
   renderer.render( scene, camera );
 }
