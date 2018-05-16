@@ -46,7 +46,7 @@ function init() {
   scene.add( paddle );
 
   var ballGeo = new THREE.BoxGeometry( 25, 25, 25 );
-  var ballMatr = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
+  var ballMatr = new THREE.MeshBasicMaterial( { color: 0x000000 } );
   ball = new THREE.Mesh( ballGeo, ballMatr );
   ball.position.x = -500;
   ball.position.y = 50;

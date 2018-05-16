@@ -3,7 +3,9 @@
   var renderer,
       camera,
       scene,
+      annie,
       myCanvas = document.getElementById('myCanvas');
+      var clock = new THREE.Clock();
   //RENDERER
   renderer = new THREE.WebGLRenderer({canvas: myCanvas});
   renderer.setClearColor(0x000000);
@@ -15,7 +17,6 @@
 
   //SCENE
   scene = new THREE.Scene();
-
   //LIGHTS
   var light = new THREE.AmbientLight(0xffffff, 0.5);
   scene.add(light);
@@ -40,17 +41,28 @@
 
 ////////////////////Sprite
 
+
+
 // Sprite material
-var material = new THREE.SpriteMaterial({
-  map: new THREE.TextureLoader().load("three/brwnbot.png"),
-  // color: 0xF3FFE2
-});
-var mesh = new THREE.Sprite(material);
-mesh.scale.set(100, 100, 100);
-mesh.position.z = -1000;
-mesh.position.y = 225;
-mesh.position.x = 225;
-scene.add(mesh, mesh1);
+  var runnerTexture = new THREE.TextureLoader().load( 'textures/player_0/e.png' );
+	annie = new TextureAnimator( runnerTexture, 10, 1, 10, 75 ); // texture, #horiz, #vert, #total, duration.
+	var runnerMaterial = new THREE.MeshBasicMaterial( { map: runnerTexture, side:THREE.DoubleSide } );
+	var runnerGeometry = new THREE.PlaneGeometry(50, 50, 1, 1);
+	var runner = new THREE.Mesh(runnerGeometry, runnerMaterial);
+	runner.position.set(-100,25,0);
+	scene.add(runner);
+
+
+// var material = new THREE.SpriteMaterial({
+//   map: new THREE.TextureLoader().load("/textures/player_0/e.png"),
+//
+// });
+// var mesh = new THREE.Sprite(material);
+// mesh.scale.set(200, 100, 100);
+// mesh.position.z = -1000;
+// mesh.position.y = 225;
+// mesh.position.x = 225;
+// scene.add(mesh, mesh1);
 
 mesh1.rotation.x = 2.25;
   myCanvas.innerHTML = mesh1.rotation.y;
@@ -82,14 +94,68 @@ function onDocumentKeyDown(event) {
         render();
 }
 
+function animate()
+{
+    requestAnimationFrame( animate );
+	render();
+	update();
+}
+
+function update()
+{
+	var delta = clock.getDelta();
+	annie.update(1000 * delta);
+
+}
+
   requestAnimationFrame(render);
   function render() {
+    animate();
+
+    // material.map.needsUpdate = true;
+    // material.displacementScale = 200;
+    // material.displacementMap.needsUpdate = true;
      // delta += 0.01;
     // material.rotation.x +=  Math.PI / 100;
     // mesh1.rotation.x += 0.025;
 
-    console.log(mesh.position.z, mesh.position.y, mesh.position.x);
-    console.log(mesh1.position.z, mesh1.position.y, mesh1.position.x);
+    // console.log(mesh.position.z, mesh.position.y, mesh.position.x);
+    // console.log(mesh1.position.z, mesh1.position.y, mesh1.position.x);
     renderer.render(scene, camera);
     requestAnimationFrame(render);
   }
+
+  function TextureAnimator(texture, tilesHoriz, tilesVert, numTiles, tileDispDuration){
+	// note: texture passed by reference, will be updated by the update function.
+
+	this.tilesHorizontal = tilesHoriz;
+	this.tilesVertical = tilesVert;
+	// how many images does this spritesheet contain?
+	//  usually equals tilesHoriz * tilesVert, but not necessarily,
+	//  if there at blank tiles at the bottom of the spritesheet.
+	this.numberOfTiles = numTiles;
+	texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+	texture.repeat.set( 1 / this.tilesHorizontal, 1 / this.tilesVertical );
+	// how long should each image be displayed?
+	this.tileDisplayDuration = tileDispDuration;
+	// how long has the current image been displayed?
+	this.currentDisplayTime = 0;
+	// which image is currently being displayed?
+	this.currentTile = 0;
+
+	this.update = function( milliSec )
+	{
+		this.currentDisplayTime += milliSec;
+		while (this.currentDisplayTime > this.tileDisplayDuration)
+		{
+			this.currentDisplayTime -= this.tileDisplayDuration;
+			this.currentTile++;
+			if (this.currentTile == this.numberOfTiles)
+				this.currentTile = 0;
+			var currentColumn = this.currentTile % this.tilesHorizontal;
+			texture.offset.x = currentColumn / this.tilesHorizontal;
+			var currentRow = Math.floor( this.currentTile / this.tilesHorizontal );
+			texture.offset.y = currentRow / this.tilesVertical;
+		}
+	};
+}

@@ -1,0 +1,31 @@
+<html>
+	<head>
+		<title> GEAR TEAST three.js app</title>
+		<style>
+			body { margin: 0; overflow:hidden; }
+			canvas {
+				background-color: red;
+			}
+
+		</style>
+	</head>
+	<body>
+		<!-- <button onclick="play()">Play</button> -->
+		<canvas id="myCanvas" style="width:800px; height:800px;">
+			<img id="gif1" src="three/basic.gif">
+		</canvas>
+		<!-- <audio id="myAudio" src="audio/nouvelle.mp3"></audio> -->
+		<script src="three/three.js"></script>
+		<script src="three/sprite.js"></script>
+		<script src="three/TextureAnimator.js"></script>
+		<!-- <script src="three/isometric.js"></script> -->
+		<!-- <script src="three/3dav.js"></script> -->
+		<!-- <script src="three/keeper.js"></script> -->
+		<!-- <script src="three/invader.js"></script> -->
+		<!-- <script src="three/breakout3djs.js"></script> -->
+
+
+
+
+	</body>
+</html>
