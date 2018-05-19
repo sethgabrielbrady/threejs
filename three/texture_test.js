@@ -1,17 +1,3 @@
-
-<html lang="en">
-<head>
-	<title>Texture Animation (Three.js)</title>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-</head>
-<body>
-
-<script src="three/Three.js"></script>
-
-
-
-<script>
 /*
 	Three.js "tutorials by example"
 	Author: Lee Stemkoski
@@ -66,6 +52,7 @@ function init()
 	runner.position.set(-1000,25,0);
 	scene.add(runner);
 }
+
 function animate()
 {
     requestAnimationFrame( animate );
@@ -82,6 +69,7 @@ function render()
 {
 	renderer.render( scene, camera );
 }
+
 function TextureAnimator(texture, tilesHoriz, tilesVert, numTiles, tileDispDuration)
 {
 	// note: texture passed by reference, will be updated by the update function.
@@ -117,8 +105,3 @@ function TextureAnimator(texture, tilesHoriz, tilesVert, numTiles, tileDispDurat
 		}
 	};
 }
-
-</script>
-
-</body>
-</html>

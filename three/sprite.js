@@ -35,7 +35,7 @@
   // var material = new THREE.MeshLambertMaterial({color: 0xf3ffe2});
   // var mesh = new THREE.Mesh(geometry, material);
   // mesh.position.set(0, 0, -1000);
-  // scene.add(mesh);
+  scene.add(mesh);
 
 
 
@@ -44,25 +44,17 @@
 
 
 // Sprite material
-  var runnerTexture = new THREE.TextureLoader().load( 'textures/player_0/e.png' );
-	annie = new TextureAnimator( runnerTexture, 10, 1, 10, 75 ); // texture, #horiz, #vert, #total, duration.
-	var runnerMaterial = new THREE.MeshBasicMaterial( { map: runnerTexture, side:THREE.DoubleSide } );
-	var runnerGeometry = new THREE.PlaneGeometry(50, 50, 1, 1);
-	var runner = new THREE.Mesh(runnerGeometry, runnerMaterial);
-	runner.position.set(-100,25,0);
-	scene.add(runner);
 
+var material = new THREE.SpriteMaterial({
+  map: new THREE.TextureLoader().load("brwnbot.png"),
 
-// var material = new THREE.SpriteMaterial({
-//   map: new THREE.TextureLoader().load("/textures/player_0/e.png"),
-//
-// });
-// var mesh = new THREE.Sprite(material);
-// mesh.scale.set(200, 100, 100);
-// mesh.position.z = -1000;
-// mesh.position.y = 225;
-// mesh.position.x = 225;
-// scene.add(mesh, mesh1);
+});
+var mesh = new THREE.Sprite(material);
+mesh.scale.set(200, 100, 100);
+mesh.position.z = -1000;
+mesh.position.y = 225;
+mesh.position.x = 225;
+scene.add(mesh, mesh1);
 
 mesh1.rotation.x = 2.25;
   myCanvas.innerHTML = mesh1.rotation.y;
@@ -103,7 +95,7 @@ function animate()
 
 function update()
 {
-	var delta = clock.getDelta();
+	
 	annie.update(1000 * delta);
 
 }
