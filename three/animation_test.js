@@ -24,7 +24,7 @@ function init() {
   scene.background = new THREE.Color( 0xf0f0f0 );
 
   // Grid
-  var gridHelper = new THREE.GridHelper(1000, 12);
+  var gridHelper = new THREE.GridHelper(1000, 14);
   scene.add( gridHelper );
 
   //  3d model with movement
@@ -101,24 +101,42 @@ function init() {
         //
 				// 		scene.add( sprite );
 				// } );
+				//
+
+        var loader = new THREE.JSONLoader();
+        loader.load('models/bg2.json', function(geometry, materials) {
+            mesh = new THREE.Mesh(geometry, materials);
+            mesh.scale.x = mesh.scale.y = mesh.scale.z = 7.5;
+            mesh.position.x = -160;
+            mesh.position.y = 250;
+            mesh.position.z = 140;
+            mesh.translation = geometry.center(geometry);
+            mesh.rotation.set(0, 3.12,0);
+            scene.add(mesh);
+        });
 
 
-        texture1 = new THREE.TextureLoader().load( 'textures/player_0/sw.png' );
+
+
+
+        texture1 = new THREE.TextureLoader().load( 'textures/player_0/e.png' );
         // materialArray.push(new THREE.MeshBasicMaterial({ map: THREE.ImageUtils.loadTexture('img/s2.png'), opacity: 0.9, color: 0xFF0000 }));
 
-      	annie = new TextureAnimator( texture1, 4, 1, 4, 200 ); // texture, #horiz, #vert, #total, duration.
-      	var runnerMaterial = new THREE.MeshBasicMaterial( { map: texture1, side:THREE.DoubleSide,  transparent: true } );
+      	annie = new TextureAnimator( texture1, 4, 1, 4, 180 ); // texture, #horiz, #vert, #total, duration.
+      	// var runnerMaterial = new THREE.MeshBasicMaterial( { map: texture1, side:THREE.DoubleSide,  transparent: true } );
+        var runnerMaterial = new THREE.MeshBasicMaterial( { map: texture1, side:THREE.DoubleSide,  transparent: true } );
       	var runnerGeometry = new THREE.PlaneGeometry(200, 200, 1, 1);
       	var runner = new THREE.Mesh(runnerGeometry, runnerMaterial);
-        runner.rotation.set(-.15,-4,0); //use this to set the correct orientation of the texture - XYZ
+        //use this to set the correct orientation of the texture - XYZ
+        runner.rotation.set(0,-4,0);
       	runner.position.set(0,200,0);
 
       	scene.add(runner);
 
 
   // Lights
-  // var ambientLight = new THREE.AmbientLight( 0xffffff, 0.75 );
-  // scene.add( ambientLight );
+  var ambientLight = new THREE.AmbientLight( 0xffffff, 0.75 );
+  scene.add( ambientLight );
   // var light2 = new THREE.PointLight(0xffffff, 1);
   // scene.add(light2);
 
@@ -162,9 +180,9 @@ function update(){
 
 function render() {
 
-  // var timer = Date.now() * 0.0001;
-  // camera.position.x = Math.cos(timer) * 800;
-  // camera.position.z = Math.sin(timer) * 800;
+  var timer = Date.now() * 0.0001;
+  camera.position.x = Math.cos(timer) * 800;
+  camera.position.z = Math.sin(timer) * 800;
 
   camera.lookAt( scene.position );
   renderer.render( scene, camera );

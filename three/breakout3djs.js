@@ -2,6 +2,7 @@ var container, stats;
 var camera, scene, renderer;
 var frustumSize = 1000;
 var ball;
+var shot;
 var paddle;
 var upWall;
 var canvas = document.getElementById("myCanvas");
@@ -9,11 +10,11 @@ var gridHelper;
 var dx = 10;
 var dy =-10;
 var ballRadius = 12.5;
-var rightPressed, leftPressed;
+var rightPressed, leftPressed, upPressed;
 var paddleWidth;
 var binary = (Math.random() * 2) + 1;
 var zRND = Math.random() * 500;
-
+var test;
 
 init();
 animate();
@@ -52,6 +53,15 @@ function init() {
   ball.position.y = 50;
   ball.position.z = zRND;
   scene.add( ball );
+
+  var shotGeo = new THREE.BoxGeometry( 25, 25, 25 );
+  var shotMatr = new THREE.MeshBasicMaterial( { color: 0x000000 } );
+  shot = new THREE.Mesh( shotGeo, shotMatr );
+  shot.position.x = 500;
+  shot.position.y = 50;
+  shot.position.z = 0;
+  scene.add( shot );
+
 
   // Lights
   var ambientLight = new THREE.AmbientLight( 0xf03ff0 );
@@ -119,6 +129,10 @@ function keyDownHandler(e) {
   else if(e.keyCode == 39) {
     leftPressed = true;
   }
+  else if(e.keyCode == 38) {
+    upPressed = true;
+    test = paddle.position.z;
+  }
 }
 function keyUpHandler(e) {
   if(e.keyCode == 37) {
@@ -127,14 +141,31 @@ function keyUpHandler(e) {
   else if(e.keyCode == 39) {
     leftPressed = false;
   }
+  else if(e.keyCode == 38) {
+    console.log(test);
+  }
 }
+
 
 function render() {
   if(rightPressed && paddle.position.z < 500-70) {
     paddle.position.z += 14;
+    shot.position.z = paddle.position.z;
   } else if(leftPressed && paddle.position.z > -500 + 70) {
     paddle.position.z -= 14;
+    shot.position.z = paddle.position.z;
   }
+
+
+  if(upPressed === true) {
+    shot.position.z = test;
+    shot.position.x -= 14;
+  }
+  if (shot.position.x <= -500){
+    shot.position.x = 500;
+    upPressed = false;
+  }
+
 
   col();
   if (binary === 1){
@@ -142,11 +173,11 @@ function render() {
   }else {
     zRND = zRND;
   }
-  console.log(binary);
+  // console.log(binary);
   // console.log("paddle z",paddle.position.z);
-  console.log("paddle x",paddle.position.x);
+  // console.log("paddle x",paddle.position.x);
   // console.log("ball z", ball.position.z);
-  console.log("ball x",ball.position.x);
+  // console.log("ball x",ball.position.x);
 
   if (ball.position.x > paddle.position.x + 100){
     ball.position.x = -500;
