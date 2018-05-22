@@ -110,6 +110,12 @@ function col(){
     dx = -dx;
     dy = dy + (Math.random() * 10);
   }
+  if( ball.position.x > shot.position.x &&
+    ball.position.z <= shot.position.z + 20 &&
+    ball.position.z >= shot.position.z - 20 ) {
+    dx = -dx;
+    dy = dy + (Math.random() * 10);
+  }
 
   if(ball.position.x + dx <= ballRadius -500) {
     dx = -dx;
@@ -159,7 +165,7 @@ function render() {
 
   if(upPressed === true) {
     shot.position.z = test;
-    shot.position.x -= 14;
+    shot.position.x -= 28;
   }
   if (shot.position.x <= -500){
     shot.position.x = 500;
