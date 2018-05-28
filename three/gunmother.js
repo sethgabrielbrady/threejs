@@ -1,3 +1,5 @@
+//an isometric twin stick shmup with rpg elements
+
 var container, stats;
 var camera, scene, renderer;
 var frustumSize = 1000;
@@ -17,11 +19,22 @@ var zRND = Math.random() * 500;
 var test;
 var sc = 0; //score
 var target;
-
+var rngBool;
+var yReset = 50;
 
 init();
 animate();
 
+function randomNeg(rngBool){
+var rngNeg = Math.floor(Math.random() * 2) ;
+console.log(rngNeg);
+
+  if (rngNeg === 1){
+    rngBool = rngBool *-1;
+  }else {
+    rngBool = rngBool * 1;
+  }
+}
 
 function init() {
   container = document.createElement( 'div' );
@@ -42,7 +55,7 @@ function init() {
 
   //paddle
   var paddleGeo = new THREE.BoxGeometry( 50, 50, 170 );
-  var paddleMatr = new THREE.MeshLambertMaterial( { color: 0xff0000 } );
+  var paddleMatr = new THREE.MeshLambertMaterial( { color: 0x00ff00 } );
   paddle = new THREE.Mesh( paddleGeo, paddleMatr );
   paddle.position.x = 500;
   paddle.position.y = 50;
@@ -128,6 +141,20 @@ function col(){
     console.log(sc);
     dx = -dx;
     dy = dy + (Math.random() * 10);
+
+
+    var rngNeg = Math.floor(Math.random() * 2) ;
+      if (rngNeg === 1){
+        rngBool = -1;
+      }else {
+        rngBool =  1;
+      }
+    var targetNewPos = Math.random() * 460;
+    targetNewPos = targetNewPos * rngBool;
+    target.position.z = targetNewPos * rngBool;
+    target.position.y = yReset;
+
+    console.log(target.position.x, target.position.y, target.position.z);
   }
 
   if(ball.position.x + dx <= ballRadius -500) {
@@ -167,6 +194,7 @@ function keyUpHandler(e) {
 
 
 function render() {
+
   if(rightPressed && paddle.position.z < 500-70) {
     paddle.position.z += 14;
     shot.position.z = paddle.position.z;
@@ -177,13 +205,17 @@ function render() {
 
 
   if(upPressed === true) {
-    // console.log(target.position.z, shot.position.x);
-    target.position.y = 100;
     shot.position.z = test;
     shot.position.x -= 28;
-    // if(shot.position.x === target.position.x && shot.position.z === target.position.z ){
-    //   // target.position.y = -1700;
-    // }
+
+    if(shot.position.x === target.position.x &&
+      shot.position.z <= target.position.z + 65 &&
+      shot.position.z >= target.position.z - 65 ){
+      target.position.y = -1700;
+       var neg = randomNeg();
+       console.log(neg);
+    }
+
   }
   if (shot.position.x <= -500){
     shot.position.x = 500;
