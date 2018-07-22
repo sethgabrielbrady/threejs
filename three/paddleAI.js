@@ -6,6 +6,7 @@ var frustumSize = 1000;
 var ball;
 var shot;
 var paddle;
+var enPaddle;
 var upWall;
 var canvas = document.getElementById("myCanvas");
 var gridHelper;
@@ -28,7 +29,6 @@ animate();
 function randomNeg(rngBool){
 var rngNeg = Math.floor(Math.random() * 2) ;
 console.log(rngNeg);
-
   if (rngNeg === 1){
     rngBool = rngBool *-1;
   }else {
@@ -57,18 +57,18 @@ function init() {
   var paddleGeo = new THREE.BoxGeometry( 50, 50, 170 );
   var paddleMatr = new THREE.MeshLambertMaterial( { color: 0x00ff00 } );
   paddle = new THREE.Mesh( paddleGeo, paddleMatr );
-  paddle.position.x = 500;
+  paddle.position.x = 550;
   paddle.position.y = 50;
   paddle.position.z = 20;
   scene.add( paddle );
 
-  var targetGeo = new THREE.BoxGeometry( 15, 50, 130 );
-  var targetMatr = new THREE.MeshLambertMaterial( { color: 0xff0000 } );
-  target = new THREE.Mesh( targetGeo, targetMatr );
-  target.position.x = -480;
-  target.position.y = 50;
-  target.position.z = 20;
-  scene.add( target );
+  var enemyPaddle = new THREE.BoxGeometry( 50, 50, 170 );
+  var enemyPaddleMatr = new THREE.MeshLambertMaterial( { color: 0xff0000 } );
+  enPaddle = new THREE.Mesh( enemyPaddle, enemyPaddleMatr );
+  enPaddle.position.x = -500;
+  enPaddle.position.y = 50;
+  enPaddle.position.z = 20;
+  scene.add( enPaddle );
 
   var ballGeo = new THREE.BoxGeometry( 50, 25, 50 );
   var ballMatr = new THREE.MeshBasicMaterial( { color: 0x000000 } );
@@ -134,6 +134,13 @@ function col(){
     dx = -dx;
     dy = dy + (Math.random() * 10);
   }
+
+  //enemey paddle position
+  if( ball.position.x < enPaddle.position.x  ) {
+    dx = -dx;
+    dy = dy + (Math.random() * 10);
+  }
+
   if( ball.position.x > shot.position.x &&
     ball.position.z <= shot.position.z + 20 &&
     ball.position.z >= shot.position.z - 20 ) {
@@ -142,24 +149,14 @@ function col(){
     dx = -dx;
     dy = dy + (Math.random() * 10);
 
-
     var rngNeg = Math.floor(Math.random() * 2) ;
       if (rngNeg === 1){
         rngBool = -1;
       }else {
         rngBool =  1;
       }
-    var targetNewPos = Math.random() * 460;
-    targetNewPos = targetNewPos * rngBool;
-    target.position.z = targetNewPos * rngBool;
-    target.position.y = yReset;
-
-    console.log(target.position.x, target.position.y, target.position.z);
   }
 
-  if(ball.position.x + dx <= ballRadius -500) {
-    dx = -dx;
-  }
   if (ball.position.z <= -500 + ballRadius || ball.position.z >= 500 - ballRadius){
     dy = -dy;
   }
@@ -194,7 +191,9 @@ function keyUpHandler(e) {
 
 
 function render() {
+  enPaddle.position.z = ball.position.z;
 
+  //player paddle speed
   if(rightPressed && paddle.position.z < 500-70) {
     paddle.position.z += 14;
     shot.position.z = paddle.position.z;
@@ -203,25 +202,14 @@ function render() {
     shot.position.z = paddle.position.z;
   }
 
-
   if(upPressed === true) {
     shot.position.z = test;
     shot.position.x -= 28;
-
-    if(shot.position.x === target.position.x &&
-      shot.position.z <= target.position.z + 65 &&
-      shot.position.z >= target.position.z - 65 ){
-      target.position.y = -1700;
-       var neg = randomNeg();
-       console.log(neg);
-    }
-
   }
   if (shot.position.x <= -500){
     shot.position.x = 500;
     upPressed = false;
   }
-
 
   col();
   if (binary === 1){
@@ -229,22 +217,18 @@ function render() {
   }else {
     zRND = zRND;
   }
-  // console.log(binary);
-  // console.log("paddle z",paddle.position.z);
-  // console.log("paddle x",paddle.position.x);
-  // console.log("ball z", ball.position.z);
-  // console.log("ball x",ball.position.x);
 
-  if (ball.position.x > paddle.position.x + 100){
+  //resets if the ball goes out of bounds
+  if (ball.position.x < enPaddle.position.x - 100 || ball.position.x > paddle.position.x + 100 ){
     ball.position.x = -500;
     ball.position.z = Math.random() * 500;
     dx = 10;
     dy =-10;
   }
   // unset this for rotating camera
-  var timer = Date.now() * 0.0001;
-  camera.position.x = Math.cos(timer) * 800;
-  camera.position.z = Math.sin(timer) * 800;
+  // var timer = Date.now() * 0.0001;
+  // camera.position.x = Math.cos(timer) * 800;
+  // camera.position.z = Math.sin(timer) * 800;
   camera.lookAt( scene.position );
   renderer.render( scene, camera );
 }
