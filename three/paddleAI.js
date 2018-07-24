@@ -191,6 +191,11 @@ function keyUpHandler(e) {
 
 
 function render() {
+  // if (enPaddle.position.z !== ball.position.z){
+  //     enpaddle.position.z += 14;
+  // }else {
+  //   return 0;
+  // }
   enPaddle.position.z = ball.position.z;
 
   //player paddle speed
